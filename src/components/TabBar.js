@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
 
 const Wrapper = styled.div`
   background-color: white;
@@ -8,7 +9,6 @@ const Wrapper = styled.div`
   margin: 0 auto;
   display: flex;
   width: 100%;
-  /* padding: 0 8px; */
   justify-content: center;
 `;
 
@@ -37,9 +37,21 @@ const TabBar = () => {
   return (
     <Wrapper>
       <Tabs>
-        <TabItem>MAP</TabItem>
-        <TabItem>LIST</TabItem>
-        <TabItem>GUIDE</TabItem>
+        <TabItem>
+          <Link href="/map">
+            <a>MAP</a>
+          </Link>
+        </TabItem>
+        <TabItem>
+          <Link href="/checklist">
+            <a>LIST</a>
+          </Link>
+        </TabItem>
+        <TabItem>
+          <Link href="/guide">
+            <a>GUIDE</a>
+          </Link>
+        </TabItem>
       </Tabs>
     </Wrapper>
   );
