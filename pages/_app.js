@@ -1,6 +1,6 @@
-import React from "react";
-import App, { Container } from "next/app";
-import Page from "../src/components/Page";
+import React from 'react';
+import App, { Container } from 'next/app';
+import Page from '../src/components/Page';
 
 class CustomApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -13,12 +13,12 @@ class CustomApp extends App {
   }
 
   render() {
-    const { Component, pageProps } = this.props;
+    const { Component, pageProps, router } = this.props;
 
     return (
       <Container>
         <Page>
-          <Component {...pageProps} />
+          <Component {...pageProps} router={router} />
         </Page>
       </Container>
     );
