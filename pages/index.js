@@ -14,6 +14,7 @@ class Home extends Component {
   render() {
     return (
       <Fragment>
+        <ListItem url="/map" text={'MAPA'} />
         <ListItem url="/disaster" text={'Enchente'} />
         <ListItem url="/disaster" text={'Furacão'} />
         <ListItem url="/disaster" text={'Terremoto'} />
