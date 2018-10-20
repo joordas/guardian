@@ -1,6 +1,7 @@
 import React from 'react'
 import { compose, withProps, withStateHandlers } from "recompose"
-import { withScriptjs,
+import {
+    withScriptjs,
     withGoogleMap,
     GoogleMap,
     Marker,
@@ -12,11 +13,17 @@ import { withScriptjs,
 const Map = compose(
     withStateHandlers(() => ({
         isOpen: false,
-      }), {
-        onToggleOpen: ({ isOpen }) => () => ({
-          isOpen: !isOpen,
-        })
-      }),
+        markerLat: null,
+        markerLng: null,
+    }), {
+            onToggleOpen: ({ isOpen }) => () => ({
+                isOpen: !isOpen,
+            }),
+            onMapRightClick: () => (e) => ({
+                markerLat: e.latLng.lat(),
+                markerLng: e.latLng.lng(),
+            })
+        }),
     withProps({
         googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyBKFw7Jn7M3Lg5bvWQmyrPBdH4wHGAlA-M",
         loadingElement: <div style={{ height: `100%` }} />,
@@ -28,9 +35,13 @@ const Map = compose(
     (props =>
         <GoogleMap
             defaultZoom={props.zoom}
-            defaultCenter={{ lat: props.lat, lng: props.lng }}
+            defaultCenter={{
+                lat: props.lat || -22.978862,
+                lng: props.lng || -43.233944,
+            }}
+            onRightClick={(e) => props.onMapRightClick(e)}
         >
-            <Marker
+            {props.markerLat && props.markerLng && <Marker
                 position={{ lat: props.markerLat, lng: props.markerLng }}
                 onClick={props.onToggleOpen}
             >
@@ -39,10 +50,8 @@ const Map = compose(
                         <p>test</p>
                     </div>
                 </InfoWindow>}
-            </Marker>
+            </Marker>}
         </GoogleMap>
     );
-
-    
 
 export default Map;
