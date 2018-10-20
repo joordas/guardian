@@ -1,6 +1,7 @@
 import React from 'react';
 import App, { Container } from 'next/app';
 import Page from '../src/components/Page';
+import Head from 'next/head';
 
 class CustomApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -13,12 +14,22 @@ class CustomApp extends App {
   }
 
   render() {
-    const { Component, pageProps, router } = this.props;
+    const { Component, pageProps } = this.props;
 
     return (
       <Container>
+        <Head>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css"
+          />
+          <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
+            rel="stylesheet"
+          />
+        </Head>
         <Page>
-          <Component {...pageProps} route={router.route}/>
+          <Component {...pageProps} />
         </Page>
       </Container>
     );
