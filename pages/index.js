@@ -1,14 +1,15 @@
-import React, { Component } from "react";
-import Link from "next/link";
+import React, { Component, Fragment } from "react";
+import ListItem from '../src/components/ListItem'
 
 class Home extends Component {
   render() {
     return (
-      <div>
-        <Link href="/list">
-          <a>Hello</a>
-        </Link>
-      </div>
+      <Fragment>
+        <ListItem url="/disaster" text={'Enchente'} />
+        <ListItem url="/disaster" text={'Furacão'} />
+        <ListItem url="/disaster" text={'Terremoto'} />
+        <ListItem url="/disaster" text={'Queimada'} />
+      </Fragment>
     );
   }
 }

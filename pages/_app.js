@@ -13,12 +13,12 @@ class CustomApp extends App {
   }
 
   render() {
-    const { Component, pageProps } = this.props;
+    const { Component, pageProps, router } = this.props;
 
     return (
       <Container>
         <Page>
-          <Component {...pageProps} />
+          <Component {...pageProps} route={router.route}/>
         </Page>
       </Container>
     );
