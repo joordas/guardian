@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import TabBar from "./TabBar";
 
 class Page extends Component {
   render() {
     return (
       <div className="tab-bar">
         {this.props.children}
-        <h1>im the tab bar</h1>
+        <TabBar />
       </div>
     );
   }
