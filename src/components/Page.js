@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import TabBar from './TabBar';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import styled, {
+  createGlobalStyle,
+  ThemeProvider
+} from 'styled-components';
 import theme from './theme';
 
 const Global = createGlobalStyle`
@@ -22,17 +25,28 @@ const Global = createGlobalStyle`
     text-decoration: none;
     color: ${theme.black};
   }
+  input {-webkit-appearance: none; box-shadow: none !important; }
+:-webkit-autofill { color: #fff !important; }
+`;
+
+const Inner = styled.div`
+  max-width: 600px;
+  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 class Page extends Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
-        <>
+        <Inner>
           <Global />
           {this.props.children}
           <TabBar />
-        </>
+        </Inner>
       </ThemeProvider>
     );
   }

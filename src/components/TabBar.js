@@ -4,8 +4,8 @@ import Link from 'next/link';
 
 const Wrapper = styled.div`
   background-color: white;
-  position: absolute;
-  bottom: 0;
+  /* position: absolute;
+  bottom: 0; */
   margin: 0 auto;
   display: flex;
   width: 100%;
