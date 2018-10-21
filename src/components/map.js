@@ -9,6 +9,7 @@ import {
     DirectionsRenderer
 } from "react-google-maps"
 
+const safeMarker = 'https://mt.google.com/vt/icon?color=ff004C13&name=icons/spotlight/spotlight-waypoint-blue.png'
 
 
 const Map = compose(
@@ -75,12 +76,12 @@ const Map = compose(
                 position={{ lat: -22.978862, lng: -43.233944 }}
                 onClick={() => props.handleMarkerClickOpen('self')}
                 onClick={() => props.handleMarkerClickOpen('self')}
-                >
+            >
                 {props.openMarkers.includes('self') && <InfoWindow onCloseClick={() => props.handleMarkerClickClose('self')}>
                     <div>
                         <input type='text' />
                         <input type='text' />
-                        <button >Salvar localização</button>
+                        <button onClick={() => {}}>Salvar localização</button>
                     </div>
                 </InfoWindow>}
             </Marker>
@@ -90,12 +91,15 @@ const Map = compose(
                     key={`marker-${index}`}
                     position={{ lat: marker.lat, lng: marker.lng }}
                     onClick={() => props.handleMarkerClickOpen(index)}
+                    defaultIcon={marker.safe ? safeMarker : null}
                 >
                     {props.openMarkers.includes(index) && <InfoWindow onCloseClick={() => props.handleMarkerClickClose(index)}>
                         <div>
-                            <input type='text' />
-                            <input type='text' />
-                            <button onClick={() => props.setDestination(marker.lat, marker.lng)}>Ir até aqui</button>
+                            <p>{marker.name}</p>
+                            <p>{marker.phone}</p>
+                            <button onClick={() => props.setDestination(marker.lat, marker.lng)}>
+                                {marker.safe ? 'Ir até aqui' : 'Ajudar'}
+                            </button>
                         </div>
                     </InfoWindow>}
                 </Marker>
@@ -108,7 +112,7 @@ const Map = compose(
                     <div>
                         <input type='text' />
                         <input type='text' />
-                        <button onClick={() => props.setDestination(props.markerLat, props.markerLng)} >Ir até aqui</button>
+                        <button onClick={() => {}}>Salvar localização</button>
                     </div>
                 </InfoWindow>}
             </Marker>}
