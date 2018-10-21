@@ -17,7 +17,8 @@ const Map = compose(
         lng: null,
         markerLat: null,
         markerLng: null,
-        map: null
+        map: null,
+        openMarkers: [],
     }),
         {
             // onToggleOpen: ({ isOpen }) => () => ({
@@ -35,7 +36,18 @@ const Map = compose(
             onDragEnd: ({ map }) => (e) => ({
                 lat: map.getCenter().lat(),
                 lng: map.getCenter().lng()
-            })
+            }),
+            handleMarkerClickOpen: ({ openMarkers }) => (id) => {
+                if (openMarkers.includes(id)) {
+                    const filteredMarker = openMarkers.filter(markerId => markerId !== id)
+                    return { openMarkers: filteredMarker}
+                }
+                return { openMarkers: [...openMarkers, id] }
+            },
+            handleMarkerClickClose: ({ openMarkers }) => (id) => {
+                const filteredMarker = openMarkers.filter(markerId => markerId !== id)
+                return { openMarkers: filteredMarker}
+            }
         }),
     withProps({
         googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyBKFw7Jn7M3Lg5bvWQmyrPBdH4wHGAlA-M",
@@ -61,9 +73,10 @@ const Map = compose(
             <Marker
                 key={`marker-self`}
                 position={{ lat: -22.978862, lng: -43.233944 }}
-                onClick={props.handleMarkerClick}
-            >
-                {props.showInfo && <InfoWindow onCloseClick={props.handleMarkerClick}>
+                onClick={() => props.handleMarkerClickOpen('self')}
+                onClick={() => props.handleMarkerClickOpen('self')}
+                >
+                {props.openMarkers.includes('self') && <InfoWindow onCloseClick={() => props.handleMarkerClickClose('self')}>
                     <div>
                         <input type='text' />
                         <input type='text' />
@@ -76,9 +89,9 @@ const Map = compose(
                 <Marker
                     key={`marker-${index}`}
                     position={{ lat: marker.lat, lng: marker.lng }}
-                    onClick={props.handleMarkerClick}
+                    onClick={() => props.handleMarkerClickOpen(index)}
                 >
-                    {props.showInfo && <InfoWindow onCloseClick={props.handleMarkerClick}>
+                    {props.openMarkers.includes(index) && <InfoWindow onCloseClick={() => props.handleMarkerClickClose(index)}>
                         <div>
                             <input type='text' />
                             <input type='text' />
@@ -89,9 +102,9 @@ const Map = compose(
             ))}
             {props.markerLat && props.markerLng && <Marker
                 position={{ lat: props.markerLat, lng: props.markerLng }}
-                onClick={props.handleMarkerClick}
+                onClick={() => props.handleMarkerClickOpen('rightClick')}
             >
-                {props.showInfo && <InfoWindow onCloseClick={props.handleMarkerClick}>
+                {props.openMarkers.includes('rightClick') && <InfoWindow onCloseClick={() => props.handleMarkerClickClose('rightClick')}>
                     <div>
                         <input type='text' />
                         <input type='text' />
@@ -105,13 +118,7 @@ const Map = compose(
 export default class MyMap extends PureComponent {
 
     state = {
-        showInfo: false,
-        directions: null
-    }
-
-    handleMarkerClick = () => {
-        const { showInfo } = this.state
-        this.setState({ showInfo: !showInfo })
+        directions: null,
     }
 
     setDestination = (lat, lng) => {
@@ -134,8 +141,6 @@ export default class MyMap extends PureComponent {
 
     render() {
         return <Map {...this.props}
-            showInfo={this.state.showInfo}
-            handleMarkerClick={this.handleMarkerClick}
             directions={this.state.directions}
             setDestination={this.setDestination}
         />
