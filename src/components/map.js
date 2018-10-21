@@ -57,6 +57,21 @@ const Map = compose(
             onDragEnd={props.onDragEnd}
         >
             {props.directions && <DirectionsRenderer directions={props.directions} />}
+
+            <Marker
+                key={`marker-self`}
+                position={{ lat: -22.978862, lng: -43.233944 }}
+                onClick={props.handleMarkerClick}
+            >
+                {props.showInfo && <InfoWindow onCloseClick={props.handleMarkerClick}>
+                    <div>
+                        <input type='text' />
+                        <input type='text' />
+                        <button >Salvar localização</button>
+                    </div>
+                </InfoWindow>}
+            </Marker>
+
             {props.markers.length && props.markers.map((marker, index) => (
                 <Marker
                     key={`marker-${index}`}
@@ -64,11 +79,11 @@ const Map = compose(
                     onClick={props.handleMarkerClick}
                 >
                     {props.showInfo && <InfoWindow onCloseClick={props.handleMarkerClick}>
-                    <div>
-                    <input type='text' />
-                    <input type='text' />
-                    <button onClick={() => props.setDestination(marker.lat, marker.lng)}>Ir até aqui</button>
-                    </div>
+                        <div>
+                            <input type='text' />
+                            <input type='text' />
+                            <button onClick={() => props.setDestination(marker.lat, marker.lng)}>Ir até aqui</button>
+                        </div>
                     </InfoWindow>}
                 </Marker>
             ))}
@@ -78,9 +93,9 @@ const Map = compose(
             >
                 {props.showInfo && <InfoWindow onCloseClick={props.handleMarkerClick}>
                     <div>
-                    <input type='text' />
-                    <input type='text' />
-                    <button onClick={() => props.setDestination(props.markerLat, props.markerLng)} >Ir até aqui</button>
+                        <input type='text' />
+                        <input type='text' />
+                        <button onClick={() => props.setDestination(props.markerLat, props.markerLng)} >Ir até aqui</button>
                     </div>
                 </InfoWindow>}
             </Marker>}
