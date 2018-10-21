@@ -8,6 +8,7 @@ import {
     InfoWindow,
     DirectionsRenderer
 } from "react-google-maps"
+import f from '../../firebase'
 
 const safeMarker = 'https://mt.google.com/vt/icon?color=ff004C13&name=icons/spotlight/spotlight-waypoint-blue.png'
 
@@ -20,11 +21,10 @@ const Map = compose(
         markerLng: null,
         map: null,
         openMarkers: [],
+        name: '',
+        phone: '',
     }),
         {
-            // onToggleOpen: ({ isOpen }) => () => ({
-            //     isOpen: !isOpen,
-            // }),
             onMapRightClick: () => (e) => ({
                 markerLat: e.latLng.lat(),
                 markerLng: e.latLng.lng(),
@@ -48,6 +48,17 @@ const Map = compose(
             handleMarkerClickClose: ({ openMarkers }) => (id) => {
                 const filteredMarker = openMarkers.filter(markerId => markerId !== id)
                 return { openMarkers: filteredMarker}
+            },
+            handleNameInput: () => (e) => ({
+                name: e.target.value
+            }),
+            handlePhoneInput: () => (e) => ({
+                phone: e.target.value
+            }),
+            saveToDatabase: () => (name, phone) => {
+                f.database().ref('Map').child('marker').set({
+                  batata: 'batata'
+                });
             }
         }),
     withProps({
@@ -79,9 +90,17 @@ const Map = compose(
             >
                 {props.openMarkers.includes('self') && <InfoWindow onCloseClick={() => props.handleMarkerClickClose('self')}>
                     <div>
-                        <input type='text' />
-                        <input type='text' />
-                        <button onClick={() => {}}>Salvar localização</button>
+                        <input type='text' value={props.name} onChange={props.handleNameInput} />
+                        <input type='text' value={props.phone} onChange={props.handlePhoneInput} />
+                        <button
+                            onClick={() => props.saveToDatabase({
+                                name: props.name, 
+                                phone: props.phone,
+                                lat: -22.978862,
+                                lng: -43.233944,
+                                safe: false // <<<<<<<<
+                            })}
+                        >Salvar localização</button>
                     </div>
                 </InfoWindow>}
             </Marker>
@@ -104,18 +123,6 @@ const Map = compose(
                     </InfoWindow>}
                 </Marker>
             ))}
-            {props.markerLat && props.markerLng && <Marker
-                position={{ lat: props.markerLat, lng: props.markerLng }}
-                onClick={() => props.handleMarkerClickOpen('rightClick')}
-            >
-                {props.openMarkers.includes('rightClick') && <InfoWindow onCloseClick={() => props.handleMarkerClickClose('rightClick')}>
-                    <div>
-                        <input type='text' />
-                        <input type='text' />
-                        <button onClick={() => {}}>Salvar localização</button>
-                    </div>
-                </InfoWindow>}
-            </Marker>}
         </GoogleMap>
     );
 
