@@ -98,7 +98,7 @@ const Map = compose(
           <Marker
             key={`marker-${index}`}
             position={{ lat: marker.lat, lng: marker.lng }}
-            onClick={() => props.handleMarkerClickOpen(index)}
+            onClick={() => props.handleMarkerClickOpen(marker)}
             defaultIcon={marker.safe ? safeMarker : null}
           />
         ))}
