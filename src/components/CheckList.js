@@ -63,6 +63,7 @@ class CheckList extends Component {
       list = JSON.parse(localStorage.getItem(GUARDIAN_LIST));
     } catch (e) {
       list = [];
+      updateList(GUARDIAN_LIST, list);
     }
     this.setState({ list });
   }
@@ -70,47 +71,98 @@ class CheckList extends Component {
   render() {
     const { list } = this.state;
     return (
-      <>
-        {list.map((item, index) => {
-          return (
-            <Item key={item.key} checked={item.checked}>
-              <Check onClick={() => this.checkItem(item.key)}>
-                check
-              </Check>
-              {item.title}
-              <Delete onClick={() => this.deleteItem(item.key)}>
-                x
-              </Delete>
-            </Item>
-          );
-        })}
-        <form onSubmit={e => this.handleSubmit(e)}>
-          <input
-            type="text"
-            value={this.state.input}
-            onChange={e => this.handleChange(e)}
-          />
-          <button type={'submit'}>manda</button>
-        </form>
-      </>
+      <Wrapper>
+        <Fragment>
+          <List>
+            {list.sort(item => item.checked).map((item, index) => {
+              return (
+                <Item key={item.key} checked={item.checked}>
+                  <Check onClick={() => this.checkItem(item.key)}>
+                    check
+                  </Check>
+                  {item.title}
+                  <Delete onClick={() => this.deleteItem(item.key)}>
+                    x
+                  </Delete>
+                </Item>
+              );
+            })}
+          </List>
+          <form onSubmit={e => this.handleSubmit(e)}>
+            <Input
+              type="text"
+              value={this.state.input}
+              onChange={e => this.handleChange(e)}
+            />
+            <button type={'submit'}>manda</button>
+          </form>
+        </Fragment>
+      </Wrapper>
     );
   }
 }
+const Wrapper = styled.div`
+  height: 100%;
+  flex: 1;
+`;
 
 const ListItem = ({ item, checked }) => (
   <Item checked={checked}>{item.title}</Item>
 );
 
-const Delete = styled.button``;
-const Check = styled.button``;
+const Delete = styled.button`
+  background-color: white;
+  border: none;
+  color: dodgerblue;
+  border-radius: 8px;
+  border: 1px solid dodgerblue;
+  &:hover {
+    color: white;
+    background-color: dodgerblue;
+  }
+`;
+const Check = styled.button`
+  background-color: white;
+  border: none;
+  color: dodgerblue;
+  border-radius: 8px;
+  border: 1px solid dodgerblue;
+  &:hover {
+    color: white;
+    background-color: dodgerblue;
+  }
+`;
 
 const Item = styled.li`
   text-decoration: ${({ checked }) =>
     checked ? 'line-through' : 'none'};
   transition-duration: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
   &:hover {
     background-color: lightgrey;
   }
+`;
+
+const Fragment = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  justify-content: center;
+`;
+
+const List = styled.ul`
+  padding: 0;
+`;
+
+const Input = styled.input`
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  border: 1px solid dodgerblue;
+  -webkit-appearance: none;
 `;
 
 export default CheckList;

@@ -1,8 +1,16 @@
-import React, { Component, Fragment } from "react";
-import ListItem from '../src/components/ListItem'
+import React, { Component, Fragment } from 'react';
+import ListItem from '../src/components/ListItem';
 import f from '../firebase';
+import Onboarding from './onboarding';
+import Disasters from './disasters';
+
+export const ONBOARDING_DONE = 'ONBOARDING_DONE';
 
 class Home extends Component {
+  state = {
+    showOnboarding: true
+  };
+
   writeToDb() {
     f.database()
       .ref('batata')
@@ -11,16 +19,22 @@ class Home extends Component {
       });
   }
 
+  componentDidMount() {
+    let showOnboarding;
+    try {
+      showOnboarding = localStorage.getItem(ONBOARDING_DONE);
+    } catch {
+      showOnboarding = true;
+    }
+    this.setState({ showOnboarding });
+  }
+
   render() {
-    return (
-      <Fragment>
-        <ListItem url="/map" text={'MAPA'} />
-        <ListItem url="/disaster" text={'Enchente'} />
-        <ListItem url="/disaster" text={'Furacão'} />
-        <ListItem url="/disaster" text={'Terremoto'} />
-        <ListItem url="/disaster" text={'Queimada'} />
-      </Fragment>
-    );
+    const { showOnboarding } = this.state;
+    if (showOnboarding) {
+      return <Onboarding />;
+    }
+    return <Disasters />;
   }
 }
 
