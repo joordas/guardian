@@ -6,6 +6,7 @@ import {
     GoogleMap,
     Marker,
     InfoWindow,
+    DirectionsRenderer
 } from "react-google-maps"
 
 
@@ -55,6 +56,7 @@ const Map = compose(
             onRightClick={(e) => props.onMapRightClick(e)}
             onDragEnd={props.onDragEnd}
         >
+            {props.directions && <DirectionsRenderer directions={props.directions} />}
             {props.markers.length && props.markers.map((marker, index) => (
                 <Marker
                     key={`marker-${index}`}
@@ -62,9 +64,11 @@ const Map = compose(
                     onClick={props.handleMarkerClick}
                 >
                     {props.showInfo && <InfoWindow onCloseClick={props.handleMarkerClick}>
-                        <div>
-                            <p>test</p>
-                        </div>
+                    <div>
+                    <input type='text' />
+                    <input type='text' />
+                    <button onClick={() => props.setDestination(marker.lat, marker.lng)}>Ir até aqui</button>
+                    </div>
                     </InfoWindow>}
                 </Marker>
             ))}
@@ -74,7 +78,9 @@ const Map = compose(
             >
                 {props.showInfo && <InfoWindow onCloseClick={props.handleMarkerClick}>
                     <div>
-                        <p>test</p>
+                    <input type='text' />
+                    <input type='text' />
+                    <button onClick={() => props.setDestination(props.markerLat, props.markerLng)} >Ir até aqui</button>
                     </div>
                 </InfoWindow>}
             </Marker>}
@@ -84,7 +90,8 @@ const Map = compose(
 export default class MyMap extends PureComponent {
 
     state = {
-        showInfo: false
+        showInfo: false,
+        directions: null
     }
 
     handleMarkerClick = () => {
@@ -92,10 +99,30 @@ export default class MyMap extends PureComponent {
         this.setState({ showInfo: !showInfo })
     }
 
+    setDestination = (lat, lng) => {
+        const DirectionsService = new google.maps.DirectionsService()
+
+        DirectionsService.route({
+            origin: new google.maps.LatLng(-22.978862, -43.233944),
+            destination: new google.maps.LatLng(lat, lng),
+            travelMode: google.maps.TravelMode.DRIVING,
+        }, (result, status) => {
+            if (status === google.maps.DirectionsStatus.OK) {
+                this.setState({
+                    directions: result,
+                })
+            } else {
+                console.error(`error fetching directions ${result}`);
+            }
+        })
+    }
+
     render() {
         return <Map {...this.props}
             showInfo={this.state.showInfo}
             handleMarkerClick={this.handleMarkerClick}
+            directions={this.state.directions}
+            setDestination={this.setDestination}
         />
     }
 
