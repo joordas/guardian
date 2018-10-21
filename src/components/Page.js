@@ -45,7 +45,6 @@ class Page extends Component {
         <Inner>
           <Global />
           {this.props.children}
-          <TabBar />
         </Inner>
       </ThemeProvider>
     );
